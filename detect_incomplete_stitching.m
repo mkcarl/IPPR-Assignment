@@ -29,9 +29,11 @@ thresh1 = imgaussfilt(power3,1) > 80;
 subplot(235);imshow(thresh1); title("Gauss-thresh");
 thresh2 = bwmorph(thresh1, 'clean');
 SE1 = strel('square', 2);
-SE2 = strel('square', 4);
+SE2 = strel('diamond', 4);
 thresh3 = bwmorph(thresh2, 'bridge');
 thresh3 = imopen(thresh3,SE1);
+thresh3 = imdilate(thresh3, SE2);
+thresh3 = imdilate(thresh3, SE2);
 thresh3 = imdilate(thresh3, SE2);
 subplot(236);imshow(thresh3); title("Bridge");
 
@@ -51,35 +53,12 @@ thresh_log_gauss = log_gauss < 0.6;
 subplot(235);imshow(log_gauss); title("Threshold");
 subplot(236);imshow(thresh_log_gauss); title("Gaussian Filter");
 
-
-
-% remove noise using mean filter
-kernal = ones(5,5)/25;
-img_denoise = medfilt2(log3, [5 5]);
-img_gauss = imgaussfilt(img_denoise, 3);
-figure;
-subplot(221);imshow(log3); title("Original Image");
-subplot(222);imshow(img_denoise); title("Denoise Image");
-subplot(223);imshow(img_gauss); title("Gaussian Filter");
-
-
-
-img_sobel_vertical = edge(img_gauss, 'sobel', 'vertical');
-img_sobel_horizontal = edge(img_gauss, 'sobel', 'horizontal');
-img_canny_vertical = edge(img_gauss, 'canny', 'vertical');
-img_canny_horizontal = edge(img_gauss, 'canny', 'horizontal');
-
-figure("Name", "");
-subplot(221);imshow(img_sobel_vertical);title("Sobel Vertical");
-subplot(222);imshow(img_sobel_horizontal);title("Sobel Horizontal");
-subplot(223);imshow(img_canny_vertical);title("Canny Vertical");
-subplot(224);imshow(img_canny_horizontal);title("Canny Horizontal");
-
-% apply dilation
-SE1 = strel('diamond', 3);
-img_dilated = imdilate(img_sobel_vertical, SE1);
-figure;
-subplot(121);imshow(img_sobel_vertical);title("Original Image");
-subplot(122);imshow(img_dilated);title("Dilated Image");
-
+% show bounding box 
+figure("Name", "Bounding Box");
+imshow(img);
+hold on;
+stats = regionprops(thresh3, 'BoundingBox');
+for i = 1:length(stats)
+    rectangle('Position', stats(i).BoundingBox, 'EdgeColor', 'r', 'LineWidth', 2);
+end
 
