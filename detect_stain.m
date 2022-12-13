@@ -39,10 +39,11 @@ imshow(bw); title('intersection');
 figure("Name", 'morphology');
 SE1 = strel("diamond",5);
 bw2 = imopen(bw, SE1);
-SE2 = strel("disk", 3);
-bw2 = imdilate(bw2, SE2);
+SE2 = strel("disk", 7);
+% bw2 = imdilate(bw2, SE2);
 bw2 = imfill(bw2, "holes");
-% bw2 = imdilate(bw2, SE1);
+bw2 = imdilate(bw2, SE2);
+bw2 = imdilate(bw2, SE2);
 imshow(bw2);
 
 % outline
@@ -55,4 +56,15 @@ segmentation = imsubtract(img, uint8(outline3d*255));
 segmentation(:,:,3) = imadd(segmentation(:,:,3), uint8(outline*255));
 imshow(segmentation);
 
+% showing the bounding boxes
+figure("Name", "Bounding box");
+imshow(img);
+[L, n] = bwlabel(bw2);
+stain = regionprops(L);
+stain_box = [stain.BoundingBox];
+stain_box = reshape(stain_box, [4 n]);
+
+for c = 1:n
+    rectangle('position', stain_box(:, c), 'EdgeColor','r');
+end
 

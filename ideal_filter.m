@@ -1,4 +1,4 @@
-function [img_lp] = ideal_low_pass(gray_image, D0)
+function [img_lp] = ideal_filter(gray_image, D0, mode)
 %IDEAL_LOW_PASS Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -38,8 +38,11 @@ D = sqrt(U.^2+V.^2);
   
 % Comparing with the cut-off frequency and 
 % determining the filtering mask
-H = double(D <= D0);
-  
+if mode == "low"
+    H = double(D <= D0);
+else 
+    H = double(D > D0);
+end 
 % Convolution between the Fourier Transformed
 % image and the mask
 G = H.*FT_img;
