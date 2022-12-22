@@ -1,6 +1,6 @@
 clc; clear all; close all; 
 
-img = imread('images/fraying_2.jpg');
+img = imread('images/fraying_4.jpg');
 img = imresize(img, 0.2);
 img_gray = rgb2gray(img);
 % img_gauss = imgaussfilt(img_gray, 5);

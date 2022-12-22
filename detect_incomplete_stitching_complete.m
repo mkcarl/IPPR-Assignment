@@ -26,7 +26,7 @@ img_bridged = bwmorph(img_clean, "bridge");
 SE1 = strel('square',2);
 SE2 = strel('diamond',4);
 
-img_opened = imopen(img_bridged, SE1);
+img_opened = imopen(img_clean, SE1);
 defective_area = imdilate(img_opened, SE2);
 defective_area = imdilate(defective_area, SE2);
 defective_area = imdilate(defective_area, SE2);

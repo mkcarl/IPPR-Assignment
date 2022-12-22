@@ -1,7 +1,7 @@
 clc; clear all; close all; 
 
-img = imread('images/stain_4.jpg');
-
+img = imread('images/stain_3.jpg');
+img = imresize(img, 0.2);
 % converting to HSV colorspace 
 [H,S,V] = rgb2hsv(img);
 figure("Name", 'hsv display');
@@ -38,10 +38,10 @@ imshow(bw); title('intersection');
 % perform morphology 
 figure("Name", 'morphology');
 SE1 = strel("diamond",5);
+SE2 = strel("disk", 3);
 bw2 = imopen(bw, SE1);
-SE2 = strel("disk", 7);
 % bw2 = imdilate(bw2, SE2);
-bw2 = imfill(bw2, "holes");
+% bw2 = imfill(bw2, "holes");
 bw2 = imdilate(bw2, SE2);
 bw2 = imdilate(bw2, SE2);
 imshow(bw2);
@@ -49,7 +49,7 @@ imshow(bw2);
 % outline
 figure("Name", 'Final segmentation');
 outline = bwperim(bw2,8);
-SE3 = strel('square',8);
+SE3 = strel('square',2);
 outline = imdilate(outline, SE3);
 outline3d = cat(3, outline, outline, outline);
 segmentation = imsubtract(img, uint8(outline3d*255));

@@ -40,3 +40,5 @@ stain_box = reshape(stain_box, [4 n]);
 for c = 1:n
     rectangle('position', stain_box(:, c), 'EdgeColor','r');
 end
+
+
